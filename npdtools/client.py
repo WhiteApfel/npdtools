@@ -4,7 +4,7 @@ from string import ascii_lowercase, digits
 from random import choice
 from time import strftime
 from typing import Union
-from datetime import datetime
+from datetime import datetime, timedelta
 from re import match
 from npdtools.types import Client, Services, Service, IncomeInfo
 
@@ -102,7 +102,8 @@ class NPDTools:
 		return headers
 
 	def datestr_valid(self, date: str):
-		r = r'([0-9]{4})\-([0-1][0-9])\-([0-3][0-9])T([0-2][0-9])\:([0-5][0-9])\:([0-5][0-9])([\+\-])([0-1][0-9]):([013][05])'
+		r = r'([0-9]{4})\-([0-1][0-9])\-([0-3][0-9])T([0-2][0-9])\:([0-5][0-9])\:([0-5][0-9])(\.[0-9]+)?' \
+			r'([\+\-])([0-1][0-9]):([013][05])'
 		return bool(match(r, date))
 
 	def add_income(self, services: Union[Services, Service], inn: str = None, date: Union[datetime, str] = None):
@@ -131,7 +132,7 @@ class NPDTools:
 			print(data)
 			raise ValueError("Здесь нужна ошибка ответа")
 
-	def cancel_income(self, id: str, comment: str = 'Чек сформирован ошибочно',date: Union[datetime, str] = None):
+	def cancel_income(self, id: str, comment: str = 'Чек сформирован ошибочно', date: Union[datetime, str] = None):
 		if (date and type(date) is str) and not self.datestr_valid(date):
 			raise ValueError("_date_ must be like '2021-05-04T19:31:46+03:00'")
 		data = {
@@ -142,11 +143,27 @@ class NPDTools:
 		}
 		response = self.client.post(f"{self.__api}/cancel", json=data, headers=self.__headers())
 		if response.status_code == codes.OK and "json" in response.headers["content-type"]:
-			r_data = response.json()
-			return IncomeInfo({**r_data}['incomeInfo'])
+			return IncomeInfo(response.json())
 		else:
 			print(response.status_code)
 			print(response.text)
 			print(response.headers)
 			print(data)
 			raise ValueError("Здесь нужна ошибка ответа")
+
+	def incomes(self, start=None, end=None, period=None, sort_type='operation_time', desc=True, limit=10):
+		if not start or not end:
+			end = datetime.now().replace(microsecond=0).astimezone().isoformat()
+			start = (datetime.now() - timedelta(days=30)).replace(microsecond=0).astimezone().isoformat()
+		params = {
+			'from': start,
+			'to': end,
+			'offser': 0,
+			'sortBy': f'{sort_type}:{"desc" if desc else "asc"}',
+			'limit': limit
+		}
+		response = self.client.get(f"{self.__api}/incomes", params=params, headers=self.__headers())
+		if response.status_code == codes.OK and "json" in response.headers["content-type"]:
+			r_data = response.json()
+
+			return [IncomeInfo(c) for c in r_data['content']]

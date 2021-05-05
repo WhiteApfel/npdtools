@@ -1,19 +1,19 @@
 class IncomeTypes:
-	FROM_INDIVIDUAL = "FROM_INDIVIDUAL"
-	FROM_LEGAL_ENTITY = "FROM_LEGAL_ENTITY"
-	FROM_FOREIGN_AGENCY = "FROM_FOREIGN_AGENCY"
+	INDIVIDUAL = "FROM_INDIVIDUAL"
+	ENTITY = "FROM_LEGAL_ENTITY"
+	FOREIGN = "FROM_FOREIGN_AGENCY"
 
 
 class Client:
-	def __init__(self, data: dict = None, inn: str = None, display_name: str = None):
+	def __init__(self, data: dict = None, inn: str = None, display_name: str = None, income_type: str = None):
 		if data is None:
 			data = {}
-		self.inn = data.get('inn', None) or inn
-		self.income_type = data.get('incomeType', IncomeTypes.FROM_INDIVIDUAL)
-		if self.inn and self.income_type == IncomeTypes.FROM_INDIVIDUAL:
-			self.income_type = IncomeTypes.FROM_LEGAL_ENTITY
+		self.inn = data.get('inn', None) if not inn else inn
+		self.income_type = data.get('incomeType', IncomeTypes.INDIVIDUAL if not income_type else income_type)
+		if self.inn and self.income_type == IncomeTypes.INDIVIDUAL:
+			self.income_type = IncomeTypes.ENTITY
 		self.contact_phone = data.get('contactPhone', None)
-		self.display_name = data.get('displayName', None) or display_name
+		self.display_name = data.get('displayName', None) if not display_name else display_name
 
 	def __dict__(self):
 		return {
