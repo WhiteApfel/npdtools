@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>npdtools.types.services &#8212; документация NPDTools </title>
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/translations.js"></script>
+    
+    <link rel="index" title="Алфавитный указатель" href="../../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">документация NPDTools </a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Код модуля</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">npdtools.types.services</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Исходный код npdtools.types.services</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span><span class="p">,</span> <span class="n">List</span>
+
+
+<div class="viewcode-block" id="Service"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Service">[документация]</a><span class="k">class</span> <span class="nc">Service</span><span class="p">:</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">quantity</span>
+
+	<span class="k">def</span> <span class="nf">__dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="p">{</span>
+			<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+			<span class="s1">&#39;amount&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
+			<span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span>
+		<span class="p">}</span>
+
+	<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+			<span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span></div>
+
+
+<div class="viewcode-block" id="Services"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Services">[документация]</a><span class="k">class</span> <span class="nc">Services</span><span class="p">:</span>
+	<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">	Штучка хранит в себе позиции товаров и услуг. А ещё позволяет добавлять новые. Удалять пока-что не позволяет, так</span>
+<span class="sd">	что будь аккуратнее, а то придётся всё зделать заново.</span>
+
+<span class="sd">	**Аргументы**</span>
+
+<span class="sd">	:param ``*args``: можно вставить какое-нибудь количество экземпляров позиций</span>
+<span class="sd">	:type ``*args``: Service</span>
+
+<span class="sd">	**Атрибуты**</span>
+
+<span class="sd">	:param total_amount: Итоговая стоимость всех позиций с округлением до копеек</span>
+<span class="sd">	:type total_amount: ``float``</span>
+<span class="sd">	&quot;&quot;&quot;</span>
+	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+		<span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Service</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]):</span>
+			<span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Services.add"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Services.add">[документация]</a>	<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+		<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">		Используется для добавления позиции. Вдруг понадобится.</span>
+
+<span class="sd">		:param name: Название позиции. Например, ``Минет в машине на Фрунзе`` или ``Анальная пробка ручной работы``</span>
+<span class="sd">		:type name: ``str``</span>
+<span class="sd">		:param amount: Цена позиции (за единицу, т.к. можно указать количество)</span>
+<span class="sd">		:type amount: ``int`` or ``float``</span>
+<span class="sd">		:param quantity: Количество товара/услуг этой позиции. Только целочисленное</span>
+<span class="sd">		:type quantity: ``int``, optional, default ``1``</span>
+<span class="sd">		&quot;&quot;&quot;</span>
+		<span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">quantity</span><span class="p">))</span></div>
+
+	<span class="nd">@property</span>
+	<span class="k">def</span> <span class="nf">total_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+		<span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">quantity</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">])),</span> <span class="mi">2</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span>
+			<span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+
+	<span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">)</span></div>
+</pre></div>
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">документация NPDTools </a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Код модуля</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">npdtools.types.services</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, WhiteApfel.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+    </div>
+  </body>
+</html>

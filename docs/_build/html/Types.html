@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Types &#8212; документация NPDTools </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="prev" title="НПДТулзы приветствуют тебя!" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="index.html" title="НПДТулзы приветствуют тебя!"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация NPDTools </a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Types</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="types">
+<h1>Types<a class="headerlink" href="#types" title="Ссылка на этот заголовок">¶</a></h1>
+<dl class="py class">
+<dt id="npdtools.types.IncomeInfo">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">npdtools.types.</span></code><code class="sig-name descname"><span class="pre">IncomeInfo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">httpx.Response</span><span class="p"><span class="pre">,</span> </span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npdtools/types/income.html#IncomeInfo"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.IncomeInfo" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Объект «чека». Он страшненький, потому что ФНС не могёт в стандарты и унификации.</p>
+<p><strong>Атрибуты</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – ID/номер чека. Например, 201cc5uzeg</p></li>
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Название чека (обычно совпадает с названием товара/услуги)</p></li>
+<li><p><strong>operation_time</strong> (<code class="docutils literal notranslate"><span class="pre">datetime</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Дата проведения операции</p></li>
+<li><p><strong>request_time</strong> (<code class="docutils literal notranslate"><span class="pre">datetime</span></code> or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Дата обращения метода к API (хз, как ещё объяснить)</p></li>
+<li><p><strong>total_amount</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Итог. Полная стоимость чека</p></li>
+<li><p><strong>client</strong> (Client or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Информация о клиенте, будь то ФЛ, ИП или прочая ересь.</p></li>
+<li><p><strong>services</strong> (Services or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Объект с позициями чека</p></li>
+<li><p><strong>cancellation_info</strong> (CancellationInfo or <code class="docutils literal notranslate"><span class="pre">None</span></code>) – Информация об аннулировании чека, если он аннулирован, иначе дырочка от бублика</p></li>
+<li><p><strong>raw</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Чистые данные от ФНС. Можно посмотреть модельки ответов тут (TODO: сделай ссылку)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt id="npdtools.types.CancellationInfo">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">npdtools.types.</span></code><code class="sig-name descname"><span class="pre">CancellationInfo</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npdtools/types/income.html#CancellationInfo"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.CancellationInfo" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt id="npdtools.types.Services">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">npdtools.types.</span></code><code class="sig-name descname"><span class="pre">Services</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npdtools/types/services.html#Services"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.Services" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Штучка хранит в себе позиции товаров и услуг. А ещё позволяет добавлять новые. Удалять пока-что не позволяет, так
+что будь аккуратнее, а то придётся всё зделать заново.</p>
+<p><strong>Аргументы</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference internal" href="#npdtools.types.Service" title="npdtools.types.Service"><em>Service</em></a>) – можно вставить какое-нибудь количество экземпляров позиций</p>
+</dd>
+</dl>
+<p><strong>Атрибуты</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><p><strong>total_amount</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Итоговая стоимость всех позиций с округлением до копеек</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="npdtools.types.Services.add">
+<code class="sig-name descname"><span class="pre">add</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npdtools/types/services.html#Services.add"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.Services.add" title="Ссылка на это определение">¶</a></dt>
+<dd><p>Используется для добавления позиции. Вдруг понадобится.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Название позиции. Например, <code class="docutils literal notranslate"><span class="pre">Минет</span> <span class="pre">в</span> <span class="pre">машине</span> <span class="pre">на</span> <span class="pre">Фрунзе</span></code> или <code class="docutils literal notranslate"><span class="pre">Анальная</span> <span class="pre">пробка</span> <span class="pre">ручной</span> <span class="pre">работы</span></code></p></li>
+<li><p><strong>amount</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code> or <code class="docutils literal notranslate"><span class="pre">float</span></code>) – Цена позиции (за единицу, т.к. можно указать количество)</p></li>
+<li><p><strong>quantity</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>, optional, default <code class="docutils literal notranslate"><span class="pre">1</span></code>) – Количество товара/услуг этой позиции. Только целочисленное</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt id="npdtools.types.Service">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">npdtools.types.</span></code><code class="sig-name descname"><span class="pre">Service</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantity</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">int</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npdtools/types/services.html#Service"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.Service" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt id="npdtools.types.Client">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">npdtools.types.</span></code><code class="sig-name descname"><span class="pre">Client</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inn</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">display_name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_type</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/npdtools/types/client.html#Client"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.Client" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+<hr class="docutils" />
+<dl class="py class">
+<dt id="npdtools.types.IncomeTypes">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">npdtools.types.</span></code><code class="sig-name descname"><span class="pre">IncomeTypes</span></code><a class="reference internal" href="_modules/npdtools/types/client.html#IncomeTypes"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#npdtools.types.IncomeTypes" title="Ссылка на это определение">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="index.html"
+                        title="предыдущая глава">НПДТулзы приветствуют тебя!</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Types.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="index.html" title="НПДТулзы приветствуют тебя!"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация NPDTools </a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Types</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, WhiteApfel.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+    </div>
+  </body>
+</html>

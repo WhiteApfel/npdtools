@@ -25,8 +25,14 @@ class Services:
 	что будь аккуратнее, а то придётся всё зделать заново.
 
 	**Аргументы**
+
 	:param ``*args``: можно вставить какое-нибудь количество экземпляров позиций
 	:type ``*args``: Service
+
+	**Атрибуты**
+
+	:param total_amount: Итоговая стоимость всех позиций с округлением до копеек
+	:type total_amount: ``float``
 	"""
 	def __init__(self, *args):
 		self.services: list[Service] = []
@@ -41,14 +47,14 @@ class Services:
 		:type name: ``str``
 		:param amount: Цена позиции (за единицу, т.к. можно указать количество)
 		:type amount: ``int`` or ``float``
-		:param quantity: Количество товара/услуги
-		:type quantity: ``int``
+		:param quantity: Количество товара/услуг этой позиции. Только целочисленное
+		:type quantity: ``int``, optional, default ``1``
 		"""
 		self.services.append(Service(name, amount, quantity))
 
 	@property
-	def total_amount(self):
-		return sum([s.amount * s.quantity for s in self.services])
+	def total_amount(self) -> float:
+		return round(float(sum([s.amount * s.quantity for s in self.services])), 2)
 
 	def __iter__(self):
 		for service in self.services:

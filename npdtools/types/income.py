@@ -19,7 +19,7 @@ class IncomeInfo:
 
 	**Атрибуты**
 
-	:param id: ID/номер чека. Например, *201cc5uzeg*
+	:param id: ID/номер чека. Например, 201cc5uzeg
 	:type id: ``str``
 	:param name: Название чека (обычно совпадает с названием товара/услуги)
 	:type name: ``str``
@@ -36,7 +36,8 @@ class IncomeInfo:
 	:param cancellation_info: Информация об аннулировании чека, если он аннулирован, иначе дырочка от бублика
 	:type cancellation_info: CancellationInfo or ``None``
 	:param raw: Чистые данные от ФНС. Можно посмотреть модельки ответов тут (TODO: сделай ссылку)
-	Ltype raw: ``dict``
+	:type raw: ``dict``
+
 	"""
 	def __init__(self, response: Union[Response, dict] = None):
 		# Приведение данных к чему-то адекватному

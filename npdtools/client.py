@@ -10,11 +10,23 @@ from npdtools.types import Client, Services, Service, IncomeInfo
 
 
 class NPDTools:
-	def __init__(self, login: str, password: str, endpoint: str = None):
+	"""
+	Сама магическая штука для работы с чеками самозанятого
+
+	**Аргументы**
+	:param login: Логин, но на самом деле ваш ИНН, за исключением редких случаев
+	:type login: ``str``
+	:param password: Пароль от личного кабинета.
+	Если авторизация через Госуслуги, то читать заметку (TODO: добавить ссылку)
+	:type password: ``str``
+	:param api_url: На случай смены адреса апишки
+	:type api_url: ``str``, optional
+	"""
+	def __init__(self, login: str, password: str, api_url: str = None):
 		self.__login = login
 		self.__password = password
 
-		self.__api = 'https://lknpd.nalog.ru/api/v1' if not endpoint else endpoint
+		self.__api = 'https://lknpd.nalog.ru/api/v1' if not api_url else api_url
 		self.__client = None
 
 		self.__token = None
@@ -81,7 +93,7 @@ class NPDTools:
 		response = self.client.post(f"{self.__api}/auth/lkfl", headers=self.__headers(token=False), json=data)
 		if response.status_code == codes.OK and "json" in response.headers["content-type"]:
 			r_data = response.json()
-			self.INN = r_data['profile']['inn']
+			self.inn = r_data['profile']['inn']
 			self.__token = r_data['token']
 			self.__token_lifetime = r_data['tokenExpireIn']
 			self.__refresh_token = r_data['refreshToken']
@@ -107,6 +119,18 @@ class NPDTools:
 		return bool(match(r, date))
 
 	def add_income(self, services: Union[Services, Service], inn: str = None, date: Union[datetime, str] = None):
+		"""
+		Метод выдачи чека, декларирования дохода, регистрации поступления, документирование прихода. И в одном флаконе.
+
+		:param services: Товары и услуги в родном формате
+		:type services: Services or Service
+		:param inn: ИНН, если получатель ИП или компания
+		:type inn: ``str``, optional
+		:param date: На когда регистрировать приход. По умолчанию — сейчас
+		:type date: ``datetime`` or ``str``, optional
+		:return: Объект чека, согласно модельке
+		:rtype: IncomeInfo
+		"""
 		if (date and type(date) is str) and not self.datestr_valid(date):
 			raise ValueError("_date_ must be like '2021-05-04T19:31:46+03:00'")
 		if type(services) is Service:
@@ -133,6 +157,19 @@ class NPDTools:
 			raise ValueError("Здесь нужна ошибка ответа")
 
 	def cancel_income(self, id: str, comment: str = 'Чек сформирован ошибочно', date: Union[datetime, str] = None):
+		"""
+		Отменяем всё то, что тут наделали
+
+		:param id: ID/номер чека
+		:type id: ``str``
+		:param comment: Комментарий для отмены. По умолчанию ``Чек сформирован ошибочно``
+		:type comment: ``str``, optional
+		:param date: Время возврата, например, если вчера произошёл возврат денег, то желательно указать эту дату.
+		По умолчанию будет выставлено "сейчас"
+		:type date: ``datetime`` or ``str``, optional
+		:return: Объект чека, согласно модельке
+		:rtype: IncomeInfo
+		"""
 		if (date and type(date) is str) and not self.datestr_valid(date):
 			raise ValueError("_date_ must be like '2021-05-04T19:31:46+03:00'")
 		data = {
@@ -153,6 +190,24 @@ class NPDTools:
 
 	def incomes(self, start: Union[str, datetime] = None, end:  Union[str, datetime] = None, period: timedelta = None,
 				sort_type='operation_time', desc=True, limit=10):
+		"""
+		Списочек операций с фильтрами
+
+		:param start: с какого числа ищем чеки
+		:type start: ``datetime`` or ``str``, optional
+		:param end: до какого числа ищем чеки
+		:type end:  ``datetime`` or ``str``, optional
+		:param period: Если не указаны первые два параметра, от текущего момента возмутся 30 дней
+		:type period:  ``timedelta``, optional
+		:param sort_type: по какому параметру сортироват, по умолчанию — по времени операции
+		:type sort_type: ``str``, optional
+		:param desc: по убыванию? По умолчанию — да.
+		:type desc: ``bool``, optional
+		:param limit: сколько максимум чеков отобразить (но не больше тысячи)
+		:type limit: ``int``
+		:return: список счетов
+		:rtype: List[IncomeInfo]
+		"""
 		if not start or not end:
 			end = datetime.now().replace(microsecond=0).astimezone().isoformat()
 			delta = period if period else timedelta(days=30)
