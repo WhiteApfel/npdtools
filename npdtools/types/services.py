@@ -35,3 +35,6 @@ class Services:
 	def __iter__(self):
 		for service in self.services:
 			yield dict(service)
+
+	def __len__(self):
+		return len(self.services)

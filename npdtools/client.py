@@ -151,14 +151,24 @@ class NPDTools:
 			print(data)
 			raise ValueError("Здесь нужна ошибка ответа")
 
-	def incomes(self, start=None, end=None, period=None, sort_type='operation_time', desc=True, limit=10):
+	def incomes(self, start: Union[str, datetime] = None, end:  Union[str, datetime] = None, period: timedelta = None,
+				sort_type='operation_time', desc=True, limit=10):
 		if not start or not end:
 			end = datetime.now().replace(microsecond=0).astimezone().isoformat()
-			start = (datetime.now() - timedelta(days=30)).replace(microsecond=0).astimezone().isoformat()
+			delta = period if period else timedelta(days=30)
+			start = (datetime.now() - delta).replace(microsecond=0).astimezone().isoformat()
+		elif (start and ((type(start) is str and self.datestr_valid(start)) or type(start) is datetime)) and \
+			(end and ((type(end) is str and self.datestr_valid(end)) or type(end) is datetime)):
+			if type(start) is datetime:
+				start = start.replace(microsecond=0).astimezone().isoformat()
+			if type(start) is datetime:
+				end = end.replace(microsecond=0).astimezone().isoformat()
+		else:
+			raise ValueError("Что-то не так с датами. Но это не точно.")
 		params = {
 			'from': start,
 			'to': end,
-			'offser': 0,
+			'offset': 0,
 			'sortBy': f'{sort_type}:{"desc" if desc else "asc"}',
 			'limit': limit
 		}
