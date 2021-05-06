@@ -1,4 +1,3 @@
-from camel_converter import to_snake
 from typing import Union
 from httpx._models import Response
 from datetime import datetime
