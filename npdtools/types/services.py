@@ -20,12 +20,30 @@ class Service:
 
 
 class Services:
+	"""
+	Штучка хранит в себе позиции товаров и услуг. А ещё позволяет добавлять новые. Удалять пока-что не позволяет, так
+	что будь аккуратнее, а то придётся всё зделать заново.
+
+	**Аргументы**
+	:param ``*args``: можно вставить какое-нибудь количество экземпляров позиций
+	:type ``*args``: Service
+	"""
 	def __init__(self, *args):
 		self.services: list[Service] = []
 		if all([type(a) is Service for a in args]):
 			self.services: List[Service] = list(args)
 
 	def add(self, name: str, amount: Union[int, float], quantity: int = 1):
+		"""
+		Используется для добавления позиции. Вдруг понадобится.
+
+		:param name: Название позиции. Например, ``Минет в машине на Фрунзе`` или ``Анальная пробка ручной работы``
+		:type name: ``str``
+		:param amount: Цена позиции (за единицу, т.к. можно указать количество)
+		:type amount: ``int`` or ``float``
+		:param quantity: Количество товара/услуги
+		:type quantity: ``int``
+		"""
 		self.services.append(Service(name, amount, quantity))
 
 	@property
