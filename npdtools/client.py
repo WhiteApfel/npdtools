@@ -7,6 +7,7 @@ from typing import Union
 from datetime import datetime, timedelta
 from re import match
 from npdtools.types import Client, Services, Service, IncomeInfo
+from npdtools.errors import FNSError
 
 
 class NPDTools:
@@ -75,6 +76,8 @@ class NPDTools:
 				self.__refresh_token = r_data['refreshToken']
 			self.__token = r_data["token"]
 			self.__token_lifetime = r_data['tokenExpireIn']
+		else:
+			raise FNSError(response)
 		return self.__token
 
 	def __auth(self):
@@ -97,6 +100,8 @@ class NPDTools:
 			self.__token = r_data['token']
 			self.__token_lifetime = r_data['tokenExpireIn']
 			self.__refresh_token = r_data['refreshToken']
+		else:
+			raise FNSError(response)
 
 	def __headers(self, referer: str = None, token: bool = True):
 		headers = {
@@ -118,14 +123,14 @@ class NPDTools:
 			r'([\+\-])([0-1][0-9]):([013][05])'
 		return bool(match(r, date))
 
-	def add_income(self, services: Union[Services, Service], inn: str = None, date: Union[datetime, str] = None):
+	def add_income(self, services: Union[Services, Service, list, tuple], client: Union[Client, list, tuple] = None, date: Union[datetime, str] = None):
 		"""
 		Метод выдачи чека, декларирования дохода, регистрации поступления, документирование прихода. И в одном флаконе.
 
 		:param services: Товары и услуги в родном формате
 		:type services: Services or Service
-		:param inn: ИНН, если получатель ИП или компания
-		:type inn: ``str``, optional
+		:param client: Объект клиента, если это организация или ИП
+		:type client: ``Client``, optional
 		:param date: На когда регистрировать приход. По умолчанию — сейчас
 		:type date: ``datetime`` or ``str``, optional
 		:return: Объект чека, согласно модельке
@@ -135,11 +140,19 @@ class NPDTools:
 			raise ValueError("_date_ must be like '2021-05-04T19:31:46+03:00'")
 		if type(services) is Service:
 			services = Services(services)
+		elif type(services) in [tuple, list] \
+				and len(services) == 3 \
+				and type(services[0]) is str and type(services[1]) in [int, float] and type(services[2]) is int:
+			services = Services(services)
 		total_amount = services.total_amount
+		if type(client) in [tuple, list] and len(client) in [1, 2]:
+			if len(client) == 1:
+				client = [client[0], None]
+			client = Client(display_name=client[0], inn=client[1])
 		data = {
 			'paymentType': 'CASH',
 			'ignoreMaxTotalIncomeRestriction': False,
-			'client': dict(Client(inn=inn)),
+			'client': dict(client),
 			'requestTime': datetime.now().replace(microsecond=0).astimezone().isoformat(),
 			'operationTime': datetime.now().replace(microsecond=0).astimezone().isoformat() if not date else date,
 			'services': list([dict(s) for s in services]),

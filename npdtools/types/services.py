@@ -22,7 +22,9 @@ class Service:
 class Services:
 	"""
 	Штучка хранит в себе позиции товаров и услуг. А ещё позволяет добавлять новые. Удалять пока-что не позволяет, так
-	что будь аккуратнее, а то придётся всё зделать заново.
+	что будь аккуратнее, а то придётся всё делать заново. Принимает либо Service'ы через запятую, либо листы/туплы в
+	формате [название, цена, количество], например, ["Отсосал на трассе и принял на лицо", 5600, 1], через ту же запятую.
+	Либо ничего не принимает. Да, она такая, неприхотливая.
 
 	**Аргументы**
 
@@ -38,6 +40,8 @@ class Services:
 		self.services: list[Service] = []
 		if all([type(a) is Service for a in args]):
 			self.services: List[Service] = list(args)
+		elif all([type(a[0]) is str and type(a[1]) in [int, float] and type(a[2]) is int for a in args]):
+			self.services: List[Service] = [Service(a[0], a[1], a[2]) for a in args]
 
 	def add(self, name: str, amount: Union[int, float], quantity: int = 1):
 		"""

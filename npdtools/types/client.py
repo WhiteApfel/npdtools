@@ -1,3 +1,5 @@
+from typing import Union
+
 class IncomeTypes:
 	INDIVIDUAL = "FROM_INDIVIDUAL"
 	ENTITY = "FROM_LEGAL_ENTITY"
@@ -5,10 +7,10 @@ class IncomeTypes:
 
 
 class Client:
-	def __init__(self, data: dict = None, inn: str = None, display_name: str = None, income_type: str = None):
+	def __init__(self, data: dict = None, inn: Union[str, int] = None, display_name: str = None, income_type: str = None):
 		if data is None:
 			data = {}
-		self.inn = data.get('inn', None) if not inn else inn
+		self.inn = str(data.get('inn', None)) if not inn else str(inn)
 		self.income_type = data.get('incomeType', IncomeTypes.INDIVIDUAL if not income_type else income_type)
 		if self.inn and self.income_type == IncomeTypes.INDIVIDUAL:
 			self.income_type = IncomeTypes.ENTITY

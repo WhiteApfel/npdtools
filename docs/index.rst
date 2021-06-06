@@ -28,3 +28,4 @@
    :maxdepth: 2
 
    Types
+   Models
