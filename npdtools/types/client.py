@@ -11,7 +11,7 @@ class Client:
 	def __init__(self, data: dict = None, inn: Union[str, int] = None, display_name: str = None, income_type: str = None):
 		if data is None:
 			data = {}
-		self.inn = str(data.get('inn', None)) if inn else None
+		self.inn = str(data.get('inn', inn)) if inn else None
 		self.income_type = data.get('incomeType', IncomeTypes.INDIVIDUAL if not income_type else income_type)
 		if self.inn and self.income_type == IncomeTypes.INDIVIDUAL:
 			self.income_type = IncomeTypes.ENTITY
