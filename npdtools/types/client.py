@@ -1,5 +1,6 @@
 from typing import Union
 
+
 class IncomeTypes:
 	INDIVIDUAL = "FROM_INDIVIDUAL"
 	ENTITY = "FROM_LEGAL_ENTITY"
