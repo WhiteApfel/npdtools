@@ -138,6 +138,8 @@ class NPDTools:
 		"""
 		if (date and type(date) is str) and not self.datestr_valid(date):
 			raise ValueError("_date_ must be like '2021-05-04T19:31:46+03:00'")
+		elif date and type(date) is datetime and date < datetime.now():
+			date = date.replace(microsecond=0).astimezone().isoformat()
 		if type(services) is Service:
 			services = Services(services)
 		elif type(services) in [tuple, list] \
