@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use &#8212; документация NPDTools </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="Password" href="Password.html" />
+    <link rel="prev" title="Models" href="Models.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="Password.html" title="Password"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="Models.html" title="Models"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация NPDTools </a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">How to use</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="how-to-use">
+<h1>How to use<a class="headerlink" href="#how-to-use" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Как использовать? Хороший вопрос. Примерно так.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">npdtools</span> <span class="kn">import</span> <span class="n">NPDTools</span>
+<span class="kn">from</span> <span class="nn">npdtools.types</span> <span class="kn">import</span> <span class="n">Services</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">NPDTools</span><span class="p">(</span><span class="s2">&quot;54082336174&quot;</span><span class="p">,</span> <span class="s2">&quot;p@s$vv0Rd&quot;</span><span class="p">)</span>
+
+<span class="n">services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">()</span>
+<span class="n">services</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;Изюм&quot;</span><span class="p">,</span> <span class="mi">350</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># 350 рублей за условный килограмм, 2 килограмма</span>
+<span class="n">services</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;Пакет&quot;</span><span class="p">,</span> <span class="mf">4.55</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># один пакет за 4.55 рублей</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">services</span><span class="o">.</span><span class="n">total_amount</span><span class="p">)</span>
+
+<span class="n">income</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">add_income</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
+
+<span class="n">cancelled</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cancel_income</span><span class="p">(</span><span class="n">income</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cancelled</span><span class="o">.</span><span class="n">cancellation_info</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="Models.html"
+                        title="предыдущая глава">Models</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="Password.html"
+                        title="следующая глава">Password</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Howto.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="Password.html" title="Password"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="Models.html" title="Models"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация NPDTools </a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">How to use</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, WhiteApfel.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+    </div>
+  </body>
+</html>

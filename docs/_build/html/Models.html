@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Models &#8212; документация NPDTools </title>
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/translations.js"></script>
+    
+    <link rel="index" title="Алфавитный указатель" href="genindex.html" />
+    <link rel="search" title="Поиск" href="search.html" />
+    <link rel="next" title="How to use" href="Howto.html" />
+    <link rel="prev" title="Types" href="Types.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             accesskey="I">указатель</a></li>
+        <li class="right" >
+          <a href="Howto.html" title="How to use"
+             accesskey="N">вперёд</a> |</li>
+        <li class="right" >
+          <a href="Types.html" title="Types"
+             accesskey="P">назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация NPDTools </a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Models</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="models">
+<h1>Models<a class="headerlink" href="#models" title="Ссылка на этот заголовок">¶</a></h1>
+<p>Тут расположены примеры JSONов, с которыми приходится работать. Рассчитывай на объединение данных из запроса и ответа в объекте IncomeInfo</p>
+<p><strong>Декларирование дохлда</strong></p>
+<p>Запрос</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;operationTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-14T06:07:27+03:00&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;requestTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-14T06:07:27+03:00&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;services&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;апавп&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mi">44</span><span class="p">,</span>
+      <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;114&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span>
+      <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;totalAmount&quot;</span><span class="p">:</span> <span class="s2">&quot;56&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;client&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;contactPhone&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;displayName&quot;</span><span class="p">:</span> <span class="s2">&quot;Rusalky Sosalky Davalky LLC&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;inn&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+    <span class="s2">&quot;incomeType&quot;</span><span class="p">:</span> <span class="s2">&quot;FROM_FOREIGN_AGENCY&quot;</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;paymentType&quot;</span><span class="p">:</span> <span class="s2">&quot;CASH&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;ignoreMaxTotalIncomeRestriction&quot;</span><span class="p">:</span> <span class="n">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Ответ</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;approvedReceiptUuid&quot;</span><span class="p">:</span><span class="s2">&quot;201ggawqe9&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<hr class="docutils" />
+<p><strong>Аннулирование чека</strong></p>
+<p>Запрос</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;operationTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-14T05:52:18+03:00&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;requestTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-14T05:52:18+03:00&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Чек сформирован ошибочно&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;receiptUuid&quot;</span><span class="p">:</span> <span class="s2">&quot;201ggawqe9&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;partnerCode&quot;</span><span class="p">:</span> <span class="n">null</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Ответ</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;incomeInfo&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;approvedReceiptUuid&quot;</span><span class="p">:</span> <span class="s2">&quot;201ggawqe9&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Носочки для детей розовые&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;operationTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-06T02:46:39+03:00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;requestTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-06T02:46:39+03:00&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;paymentType&quot;</span><span class="p">:</span> <span class="s2">&quot;CASH&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;partnerCode&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;totalAmount&quot;</span><span class="p">:</span> <span class="mi">666</span><span class="p">,</span>
+    <span class="s2">&quot;cancellationInfo&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;operationTime&quot;</span><span class="p">:</span> <span class="s2">&quot;2021-05-14T05:52:18+03:00&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;registerTime&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+      <span class="s2">&quot;taxPeriodId&quot;</span><span class="p">:</span> <span class="n">null</span><span class="p">,</span>
+      <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;Чек сформирован ошибочно&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;sourceDeviceId&quot;</span><span class="p">:</span> <span class="s2">&quot;16kcmyy1mq5i4wx61q5af&quot;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Предыдущий раздел</h4>
+  <p class="topless"><a href="Types.html"
+                        title="предыдущая глава">Types</a></p>
+  <h4>Следующий раздел</h4>
+  <p class="topless"><a href="Howto.html"
+                        title="следующая глава">How to use</a></p>
+  <div role="note" aria-label="source link">
+    <h3>Эта страница</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/Models.rst.txt"
+            rel="nofollow">Исходный текст</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Быстрый поиск</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Искать" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Навигация</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="Алфавитный указатель"
+             >указатель</a></li>
+        <li class="right" >
+          <a href="Howto.html" title="How to use"
+             >вперёд</a> |</li>
+        <li class="right" >
+          <a href="Types.html" title="Types"
+             >назад</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">документация NPDTools </a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Models</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, WhiteApfel.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.5.4.
+    </div>
+  </body>
+</html>

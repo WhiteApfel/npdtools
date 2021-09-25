@@ -40,66 +40,141 @@
 
 
 <div class="viewcode-block" id="Service"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Service">[документация]</a><span class="k">class</span> <span class="nc">Service</span><span class="p">:</span>
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">quantity</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс для комфортного создания одной позиции чека. Будь то товар, услуга или ещё непонятно что =-)</span>
 
-	<span class="k">def</span> <span class="nf">__dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="p">{</span>
-			<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-			<span class="s1">&#39;amount&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span>
-			<span class="s1">&#39;quantity&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span>
-		<span class="p">}</span>
+<span class="sd">    :param name: Название позиции. Например, ``Минет в машине на Фрунзе`` или ``Анальная пробка ручной работы``</span>
+<span class="sd">    :type name: ``str``</span>
+<span class="sd">    :param amount: Цена позиции (за единицу, т.к. можно указать количество)</span>
+<span class="sd">    :type amount: ``int`` or ``float``</span>
+<span class="sd">    :param quantity: Количество товара/услуг этой позиции. Только целочисленное</span>
+<span class="sd">    :type quantity: ``int``, optional, default ``1``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-	<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-			<span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span></div>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">amount</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">quantity</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">service_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">amount</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantity</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">new_services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Service</span><span class="p">:</span>
+            <span class="n">new_services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Services</span><span class="p">:</span>
+            <span class="n">new_services</span> <span class="o">=</span> <span class="n">other</span>
+            <span class="n">new_services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+                <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">str</span>
+                <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span>
+        <span class="p">):</span>
+            <span class="n">new_services</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">other</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">new_services</span></div>
 
 
 <div class="viewcode-block" id="Services"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Services">[документация]</a><span class="k">class</span> <span class="nc">Services</span><span class="p">:</span>
-	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Штучка хранит в себе позиции товаров и услуг. А ещё позволяет добавлять новые. Удалять пока-что не позволяет, так</span>
-<span class="sd">	что будь аккуратнее, а то придётся всё зделать заново.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Штучка хранит в себе позиции товаров и услуг. А ещё позволяет добавлять новые. Удалять пока что не позволяет, так</span>
+<span class="sd">    что будь аккуратнее, а то придётся всё делать заново. Принимает либо Service&#39;ы через запятую, либо листы/туплы в</span>
+<span class="sd">    формате ``[название, цена, количество]``, например, ``[&quot;Отсосал на трассе и принял на лицо&quot;, 5600, 1]``,</span>
+<span class="sd">    через ту же запятую. Либо ничего не принимает. Да, она такая, неприхотливая.</span>
 
-<span class="sd">	**Аргументы**</span>
+<span class="sd">    **Аргументы**</span>
 
-<span class="sd">	:param ``*args``: можно вставить какое-нибудь количество экземпляров позиций</span>
-<span class="sd">	:type ``*args``: Service</span>
+<span class="sd">    :param ``*args``: можно вставить какое-нибудь количество экземпляров позиций</span>
+<span class="sd">    :type ``*args``: Service</span>
 
-<span class="sd">	**Атрибуты**</span>
+<span class="sd">    **Атрибуты**</span>
 
-<span class="sd">	:param total_amount: Итоговая стоимость всех позиций с округлением до копеек</span>
-<span class="sd">	:type total_amount: ``float``</span>
-<span class="sd">	&quot;&quot;&quot;</span>
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-		<span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Service</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+<span class="sd">    :param total_amount: Итоговая стоимость всех позиций с округлением до копеек</span>
+<span class="sd">    :type total_amount: ``float``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Services.add"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Services.add">[документация]</a>	<span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
-		<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">		Используется для добавления позиции. Вдруг понадобится.</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Service</span><span class="p">,</span> <span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="nb">int</span><span class="p">]]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="nb">all</span><span class="p">([</span><span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Service</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span>
+                    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span>
+                <span class="p">]</span>
+        <span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Service</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">Service</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">args</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__iadd__</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__add__</span>
 
-<span class="sd">		:param name: Название позиции. Например, ``Минет в машине на Фрунзе`` или ``Анальная пробка ручной работы``</span>
-<span class="sd">		:type name: ``str``</span>
-<span class="sd">		:param amount: Цена позиции (за единицу, т.к. можно указать количество)</span>
-<span class="sd">		:type amount: ``int`` or ``float``</span>
-<span class="sd">		:param quantity: Количество товара/услуг этой позиции. Только целочисленное</span>
-<span class="sd">		:type quantity: ``int``, optional, default ``1``</span>
-<span class="sd">		&quot;&quot;&quot;</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">quantity</span><span class="p">))</span></div>
+<div class="viewcode-block" id="Services.add"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Services.add">[документация]</a>    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Используется для добавления позиции напрямую по параметрам. Вдруг понадобится.</span>
 
-	<span class="nd">@property</span>
-	<span class="k">def</span> <span class="nf">total_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
-		<span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">quantity</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">])),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="sd">        :param name: Название позиции. Например, ``Минет в машине на Фрунзе`` или ``Анальная пробка ручной работы``</span>
+<span class="sd">        :type name: ``str``</span>
+<span class="sd">        :param amount: Цена позиции (за единицу, т.к. можно указать количество)</span>
+<span class="sd">        :type amount: ``int`` or ``float``</span>
+<span class="sd">        :param quantity: Количество товара/услуг этой позиции. Только целочисленное</span>
+<span class="sd">        :type quantity: ``int``, optional, default ``1``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Service</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">amount</span><span class="p">,</span> <span class="n">quantity</span><span class="p">))</span></div>
 
-	<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span>
-			<span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+<div class="viewcode-block" id="Services.append"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Services.append">[документация]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Добавляет позицию, только если она уже является экземпляром класса Service (TODO: добавь ссылку)</span>
 
-	<span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">)</span></div>
+<span class="sd">        :param name: Название позиции. Например, ``Минет в машине на Фрунзе`` или ``Анальная пробка ручной работы``</span>
+<span class="sd">        :type name: ``str``</span>
+<span class="sd">        :param amount: Цена позиции (за единицу, т.к. можно указать количество)</span>
+<span class="sd">        :type amount: ``int`` or ``float``</span>
+<span class="sd">        :param quantity: Количество товара/услуг этой позиции. Только целочисленное</span>
+<span class="sd">        :type quantity: ``int``, optional, default ``1``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">service</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Service</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;service must be instance of Service&#39;</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">total_amount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">s</span><span class="o">.</span><span class="n">amount</span> <span class="o">*</span> <span class="n">s</span><span class="o">.</span><span class="n">quantity</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">])),</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="nb">dict</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="n">new_services</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Service</span><span class="p">:</span>
+            <span class="n">new_services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">other</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Services</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">other</span><span class="p">:</span>
+                <span class="n">new_services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span>
+                <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span>
+                <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">str</span>
+                <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+                <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="ow">is</span> <span class="nb">int</span>
+        <span class="p">):</span>
+            <span class="n">new_services</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Service</span><span class="p">(</span><span class="n">other</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">other</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">other</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="k">return</span> <span class="n">Services</span><span class="p">(</span><span class="o">*</span><span class="n">new_services</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__bool__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">))</span></div>
 </pre></div>
 
             <div class="clearer"></div>

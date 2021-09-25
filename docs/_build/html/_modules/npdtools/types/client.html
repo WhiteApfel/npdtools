@@ -36,34 +36,62 @@
           <div class="body" role="main">
             
   <h1>Исходный код npdtools.types.client</h1><div class="highlight"><pre>
-<span></span><span class="k">class</span> <span class="nc">IncomeTypes</span><span class="p">:</span>
-	<span class="n">INDIVIDUAL</span> <span class="o">=</span> <span class="s2">&quot;FROM_INDIVIDUAL&quot;</span>
-	<span class="n">ENTITY</span> <span class="o">=</span> <span class="s2">&quot;FROM_LEGAL_ENTITY&quot;</span>
-	<span class="n">FOREIGN</span> <span class="o">=</span> <span class="s2">&quot;FROM_FOREIGN_AGENCY&quot;</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+
+
+<div class="viewcode-block" id="IncomeTypes"><a class="viewcode-back" href="../../../Types.html#npdtools.types.IncomeTypes">[документация]</a><span class="k">class</span> <span class="nc">IncomeTypes</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **INDIVIDUAL**: для доходов от физических лиц из РФ</span>
+
+<span class="sd">    **ENTITY**: для доходов от ИП или компаний из РФ</span>
+
+<span class="sd">    **FOREIGN**: для всех доходов от лиц или компаний из других стран</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INDIVIDUAL</span> <span class="o">=</span> <span class="s2">&quot;FROM_INDIVIDUAL&quot;</span>
+    <span class="n">ENTITY</span> <span class="o">=</span> <span class="s2">&quot;FROM_LEGAL_ENTITY&quot;</span>
+    <span class="n">FOREIGN</span> <span class="o">=</span> <span class="s2">&quot;FROM_FOREIGN_AGENCY&quot;</span></div>
 
 
 <div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../Types.html#npdtools.types.Client">[документация]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">inn</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">income_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-		<span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-			<span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inn&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">inn</span> <span class="k">else</span> <span class="n">inn</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;incomeType&#39;</span><span class="p">,</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">INDIVIDUAL</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">income_type</span> <span class="k">else</span> <span class="n">income_type</span><span class="p">)</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">==</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">INDIVIDUAL</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">ENTITY</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">contact_phone</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;contactPhone&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;displayName&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">display_name</span> <span class="k">else</span> <span class="n">display_name</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :param data: словарь из JSON&#39;a от ФНС</span>
+<span class="sd">    :type data: ``dict``</span>
+<span class="sd">    :param inn: ИНН клиента, если известен. Обязательно для ИП и юрлиц из России.</span>
+<span class="sd">    :type inn: ``int`` or ``str``, optional</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-	<span class="k">def</span> <span class="nf">__dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="p">{</span>
-			<span class="s1">&#39;incomeType&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span><span class="p">,</span>
-			<span class="s1">&#39;inn&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">inn</span><span class="p">,</span>
-			<span class="s1">&#39;display_name&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
-			<span class="s2">&quot;contact_phone&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">contact_phone</span>
-		<span class="p">}</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">inn</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">display_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">income_type</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inn&quot;</span><span class="p">,</span> <span class="n">inn</span><span class="p">))</span> <span class="k">if</span> <span class="n">inn</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;incomeType&quot;</span><span class="p">,</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">INDIVIDUAL</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">income_type</span> <span class="k">else</span> <span class="n">income_type</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">==</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">INDIVIDUAL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">ENTITY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">contact_phone</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contactPhone&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;displayName&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">display_name</span> <span class="k">else</span> <span class="n">display_name</span>
+        <span class="p">)</span>
 
-	<span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-			<span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span></div>
+    <span class="k">def</span> <span class="nf">__dict__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;incomeType&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span><span class="p">,</span>
+            <span class="s2">&quot;inn&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">inn</span><span class="p">,</span>
+            <span class="s2">&quot;display_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span>
+            <span class="s2">&quot;contact_phone&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">contact_phone</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span></div>
 </pre></div>
 
             <div class="clearer"></div>

@@ -36,90 +36,115 @@
           <div class="body" role="main">
             
   <h1>Исходный код npdtools.types.income</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">camel_converter</span> <span class="kn">import</span> <span class="n">to_snake</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 <span class="kn">from</span> <span class="nn">httpx._models</span> <span class="kn">import</span> <span class="n">Response</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">npdtools.types</span> <span class="kn">import</span> <span class="n">Services</span><span class="p">,</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Service</span>
 
 
 <div class="viewcode-block" id="CancellationInfo"><a class="viewcode-back" href="../../../Types.html#npdtools.types.CancellationInfo">[документация]</a><span class="k">class</span> <span class="nc">CancellationInfo</span><span class="p">:</span>
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">operation_time_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;operationTime&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">operation_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">operation_time_str</span><span class="p">,</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z&#39;</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;comment&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">data</span></div>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Информация об отменённом чеке. Объект для красоты и удобства</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operation_time_str</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operationTime&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operation_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operation_time_str</span><span class="p">,</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">comment</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;comment&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">data</span></div>
 
 
 <div class="viewcode-block" id="IncomeInfo"><a class="viewcode-back" href="../../../Types.html#npdtools.types.IncomeInfo">[документация]</a><span class="k">class</span> <span class="nc">IncomeInfo</span><span class="p">:</span>
-	<span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">	Объект &quot;чека&quot;. Он страшненький, потому что ФНС не могёт в стандарты и унификации.</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Объект &quot;чека&quot;. Он страшненький, потому что ФНС не могёт в стандарты и унификации.</span>
 
-<span class="sd">	**Атрибуты**</span>
+<span class="sd">    **Атрибуты**</span>
 
-<span class="sd">	:param id: ID/номер чека. Например, 201cc5uzeg</span>
-<span class="sd">	:type id: ``str``</span>
-<span class="sd">	:param name: Название чека (обычно совпадает с названием товара/услуги)</span>
-<span class="sd">	:type name: ``str``</span>
-<span class="sd">	:param operation_time: Дата проведения операции</span>
-<span class="sd">	:type operation_time: ``datetime`` or ``None``</span>
-<span class="sd">	:param request_time: Дата обращения метода к API (хз, как ещё объяснить)</span>
-<span class="sd">	:type request_time: ``datetime`` or ``None``</span>
-<span class="sd">	:param total_amount: Итог. Полная стоимость чека</span>
-<span class="sd">	:type total_amount: ``float``</span>
-<span class="sd">	:param client: Информация о клиенте, будь то ФЛ, ИП или прочая ересь.</span>
-<span class="sd">	:type client: Client or ``None``</span>
-<span class="sd">	:param services: Объект с позициями чека</span>
-<span class="sd">	:type services: Services or ``None``</span>
-<span class="sd">	:param cancellation_info: Информация об аннулировании чека, если он аннулирован, иначе дырочка от бублика</span>
-<span class="sd">	:type cancellation_info: CancellationInfo or ``None``</span>
-<span class="sd">	:param raw: Чистые данные от ФНС. Можно посмотреть модельки ответов тут (TODO: сделай ссылку)</span>
-<span class="sd">	:type raw: ``dict``</span>
+<span class="sd">    :param id: ID/номер чека. Например, 201cc5uzeg</span>
+<span class="sd">    :type id: ``str``</span>
+<span class="sd">    :param name: Название чека (обычно совпадает с названием товара/услуги)</span>
+<span class="sd">    :type name: ``str``</span>
+<span class="sd">    :param operation_time: Дата проведения операции</span>
+<span class="sd">    :type operation_time: ``datetime`` or ``None``</span>
+<span class="sd">    :param request_time: Дата обращения метода к API (хз, как ещё объяснить)</span>
+<span class="sd">    :type request_time: ``datetime`` or ``None``</span>
+<span class="sd">    :param total_amount: Итог. Полная стоимость чека</span>
+<span class="sd">    :type total_amount: ``float``</span>
+<span class="sd">    :param client: Информация о клиенте, будь то ФЛ, ИП или прочая ересь.</span>
+<span class="sd">    :type client: Client or ``None``</span>
+<span class="sd">    :param services: Объект с позициями чека</span>
+<span class="sd">    :type services: Services or ``None``</span>
+<span class="sd">    :param cancellation_info: Информация об аннулировании чека, если он аннулирован, иначе дырочка от бублика</span>
+<span class="sd">    :type cancellation_info: CancellationInfo or ``None``</span>
+<span class="sd">    :param raw: Чистые данные от ФНС. Можно посмотреть модельки ответов тут (TODO: сделай ссылку)</span>
+<span class="sd">    :type raw: ``dict``</span>
 
-<span class="sd">	&quot;&quot;&quot;</span>
-	<span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Response</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-		<span class="c1"># Приведение данных к чему-то адекватному</span>
-		<span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span> <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Response</span> <span class="k">else</span> <span class="n">response</span> <span class="k">if</span> <span class="n">response</span> <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
-		<span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">data</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;IncomeInfo&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;incomeInfo&quot;</span><span class="p">]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-		<span class="c1"># Единственная адекватная часть 🎉</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;approvedReceiptUuid&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">total_amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;totalAmount&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Response</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Приведение данных к чему-то адекватному</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">response</span><span class="p">)</span> <span class="ow">is</span> <span class="n">Response</span>
+            <span class="k">else</span> <span class="n">response</span>
+            <span class="k">if</span> <span class="n">response</span>
+            <span class="k">else</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">data</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="s2">&quot;IncomeInfo&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">data</span> <span class="k">else</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;incomeInfo&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
 
-		<span class="c1"># Игра с цифрами</span>
-		<span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;operationTime&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">operation_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;operationTime&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z&#39;</span><span class="p">)</span>
-		<span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;requestTime&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">request_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;requestTime&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">T%H:%M:%S%z&#39;</span><span class="p">)</span>
+        <span class="c1"># Единственная адекватная часть 🎉</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;approvedReceiptUuid&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_amount</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;totalAmount&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-		<span class="c1"># Описание клиента</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;client&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-		<span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">)</span>
-		<span class="k">if</span> <span class="s2">&quot;clientDisplayName&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">display_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;clientDisplayName&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">inn</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;clientInn&#39;</span><span class="p">),</span> <span class="p">)</span>
+        <span class="c1"># Игра с цифрами</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operationTime&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">operation_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;operationTime&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;requestTime&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">request_time</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;requestTime&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%S%z&quot;</span>
+            <span class="p">)</span>
 
-		<span class="c1"># Списочек с покупками</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">services</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;services&quot;</span><span class="p">,</span> <span class="n">Services</span><span class="p">())</span>
-		<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">([</span><span class="n">Service</span><span class="p">(</span><span class="n">wa</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">wa</span><span class="p">[</span><span class="s1">&#39;amount&#39;</span><span class="p">],</span> <span class="n">wa</span><span class="p">[</span><span class="s1">&#39;quantity&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">wa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">])</span>
+        <span class="c1"># Описание клиента</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;client&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">&quot;clientDisplayName&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span>
+                <span class="n">display_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;clientDisplayName&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="n">inn</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;clientInn&quot;</span><span class="p">),</span>
+            <span class="p">)</span>
 
-		<span class="c1"># Отмена платежа</span>
-		<span class="bp">self</span><span class="o">.</span><span class="n">cancellation_info</span> <span class="o">=</span> <span class="kc">None</span>
-		<span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cancellationInfo&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
-			<span class="bp">self</span><span class="o">.</span><span class="n">cancellation_info</span><span class="p">:</span> <span class="n">CancellationInfo</span> <span class="o">=</span> <span class="n">CancellationInfo</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cancellationInfo&quot;</span><span class="p">])</span>
+        <span class="c1"># Списочек с покупками</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">services</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;services&quot;</span><span class="p">,</span> <span class="n">Services</span><span class="p">())</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">services</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">services</span> <span class="o">=</span> <span class="n">Services</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">Service</span><span class="p">(</span><span class="n">wa</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="n">wa</span><span class="p">[</span><span class="s2">&quot;amount&quot;</span><span class="p">],</span> <span class="n">wa</span><span class="p">[</span><span class="s2">&quot;quantity&quot;</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">wa</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">services</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
 
-		<span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="c1"># Отмена платежа</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cancellation_info</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cancellationInfo&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cancellation_info</span><span class="p">:</span> <span class="n">CancellationInfo</span> <span class="o">=</span> <span class="n">CancellationInfo</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">[</span><span class="s2">&quot;cancellationInfo&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
 
-	<span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="n">is_cancel</span> <span class="o">=</span> <span class="s2">&quot;Cancel income&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cancellation_info</span> <span class="k">else</span> <span class="s2">&quot;Income&quot;</span>
-		<span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">is_cancel</span><span class="si">}</span><span class="s2"> #</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total_amount</span><span class="si">}</span><span class="s2"> rub.) at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">operation_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw</span> <span class="o">=</span> <span class="n">data</span>
 
-	<span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-		<span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">is_cancel</span> <span class="o">=</span> <span class="s2">&quot;Cancel income&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cancellation_info</span> <span class="k">else</span> <span class="s2">&quot;Income&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="n">is_cancel</span><span class="si">}</span><span class="s2"> #</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">total_amount</span><span class="si">}</span><span class="s2"> rub.) at </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">operation_time</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
 
-
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span></div>
 </pre></div>
 
             <div class="clearer"></div>

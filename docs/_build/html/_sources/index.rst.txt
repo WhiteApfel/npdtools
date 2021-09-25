@@ -28,3 +28,6 @@
    :maxdepth: 2
 
    Types
+   Models
+   Howto
+   Password
