@@ -32,18 +32,25 @@
 
 ```python
 from npdtools import NPDTools
+from npdtools.types import Services, Service, Client, IncomeTypes
+
 client = NPDTools("123456789012", "~_ub&TS5RY~k9,czo(q*")
 
 # Для начала составим корзину.
 # 1. Метод здорового человека
-cheque = Services()
-cheque.add("Коробка для изюма из дерева с декоративными элементами", 250, 1)
+cart = Services()
+cart.add("Коробка для изюма из дерева с декоративными элементами", 250, 1)
+cart += Service('Прокладка с крылышками', 180.85, 2)
+cart = cart + ["Прокладкохолдер", 1234.56, 1]
 
 # 2. Метод немного здорового человека
-cheque = Services(Service("Коробка", 250.5, 10), Service("Бант", 67.89, 5))
+cart = Services(Service("Коробка", 250.5, 10), Service("Бант", 67.89, 5))
 
 # 3. Метод немного нездорового человека
-cheque = Services(("Скворечник", 3600, 1), ("Палка для скворечника", 1000, 1))
+cart = Services(("Скворечник", 3600, 1), ("Палка для скворечника", 1000, 1))
+
+# И теперь можно с этой корзиной создать этсамое.
+bill = client.add_income(cart)
 
 # 4. Метод нездорового человека.Можно добавить только одну позицию.
 bill = client.add_income(Service(("Носочки", 20007.08, 1)))
@@ -52,21 +59,26 @@ bill = client.add_income(Service(("Носочки", 20007.08, 1)))
 bill = client.add_income(("Что-то неведомое", 100, 2))
 
 # Как выставлять физлицам?
-bill = client.add_income(cheque)
+bill = client.add_income(cart)
 
 # ИП или ООО или прочая российская организация?
-from npdtools.types import Client
-bill = client.add_income(cheque, Client(display_name="ИП Иванов Иван Иваныч", inn=1123456789012))
+bill = client.add_income(cart, Client(display_name="ИП Иванов Иван Иваныч", inn=112345678912))
 
-# А иностранная?
-from npdtools.types import Client
-bill = client.add_income(cheque, Client(display_name="Rusalky Davalky Inc."))
+# А если не помню название, но знаю ИНН?
+bill = client.add_income(cart, Client(inn=112345678912, income_type=IncomeTypes.ENTITY))
+
+# Если организация иностранная?
+bill = client.add_income(cart, Client(display_name="Rusalky Davalky Inc."))
+
+# А ещё знаю её ИНН
+bill = client.add_income(cart, Client(display_name="Rusalky Davalky Inc.", inn=112345678912, income_type=IncomeTypes.FOREIGN))
 ```
 
-### Канселим чеки, как Италию
+### Канселим чеки, как Италию на Евровидении 2021
 
 ```python
 from npdtools import NPDTools
+from npdtools.types import Services
 client = NPDTools("123456789012", "~_ub&TS5RY~k9,czo(q*")
 
 cheque = Services()
