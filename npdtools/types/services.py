@@ -76,6 +76,7 @@ class Services:
                 ]
         ):
             self.services: List[Service] = [Service(a[0], a[1], a[2]) for a in args]
+        self.__iadd__ = self.__add__
 
     def add(self, name: str, amount: Union[int, float], quantity: int = 1):
         """
