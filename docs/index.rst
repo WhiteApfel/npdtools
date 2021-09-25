@@ -29,3 +29,5 @@
 
    Types
    Models
+   Howto
+   Password
