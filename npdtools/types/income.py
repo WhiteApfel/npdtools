@@ -5,6 +5,9 @@ from npdtools.types import Services, Client, Service
 
 
 class CancellationInfo:
+    """
+    Информация об отменённом чеке. Объект для красоты и удобства
+    """
     def __init__(self, data: dict):
         self.operation_time_str: str = data.get("operationTime", None)
         self.operation_time = datetime.strptime(
