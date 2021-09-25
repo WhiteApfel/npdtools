@@ -133,3 +133,6 @@ class Services:
         ):
             new_services.append(Service(other[0], other[1], other[2]))
         return Services(*new_services)
+
+    def __bool__(self):
+        return bool(len(self.services))
