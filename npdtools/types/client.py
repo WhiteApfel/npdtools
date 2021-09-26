@@ -21,8 +21,12 @@ class Client:
     :type data: ``dict``
     :param inn: ИНН клиента, если известен. Обязательно для ИП и юрлиц из России.
     :type inn: ``int`` or ``str``, optional
+    :param display_name: название ИП, юрлица или иностранной компании, желательно указывать, чтобы ФНС не ругалась
+    :type display name: ``str``
+    :param income_type: тип плательщика: физлицо, российская компания или иностранная. Есть объект, чтобы указывать
+    корректно (TODO: Женя, добавь ссылку)
+    :type icome_type: ``str``
     """
-
     def __init__(
         self,
         data: dict = None,
