@@ -26,5 +26,5 @@ Types
 
 ----------------------
 
-.. autoclass:: npdtools.types.IncomeTypes
+.. autoclass:: npdtools.types.ClientType
    :members:

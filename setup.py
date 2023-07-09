@@ -1,5 +1,6 @@
-from setuptools import setup
 from io import open
+
+from setuptools import setup
 
 
 def read(filename):
@@ -9,19 +10,18 @@ def read(filename):
 
 setup(
     name="npdtools",
-    version="0.1a7",
-    packages=["npdtools", "npdtools.types", "npdtools.errors"],
+    version="1.0a1",
+    packages=["npdtools", "npdtools.types"],
     url="https://gitlab.com/whiteapfel/npdtools",
     license="MPL 2.0",
     author="WhiteApfel",
     author_email="white@pfel.ru",
     description="tool for work with FNS API",
-    install_requires=["typing", "httpx"],
+    install_requires=["typing", "httpx", "python-dateutil", "pydantic>=2.0.2"],
     project_urls={
-        "Документальное чтиво": "https://npd-tools.readthedocs.io/en/latest/",
-        "Донатик": "https://pfel.cc/donate",
-        "Исходнички": "https://gitlab.com/whiteapfel/npdtools/",
-        "Тележка для вопросов": "https://t.me/apfel",
+        "Документация": "https://npd-tools.readthedocs.io/en/latest/",
+        "Исходники": "https://gitlab.com/whiteapfel/npdtools/",
+        "По вопросам": "https://t.me/apfel",
     },
     long_description=read("README.md"),
     long_description_content_type="text/markdown",

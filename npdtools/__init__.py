@@ -1,1 +1,2 @@
-from npdtools.client import NPDTools
+from .modules import NPDTools
+from .types import *

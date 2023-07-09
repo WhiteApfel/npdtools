@@ -1,5 +1,6 @@
-from httpx._models import Response
 import json
+
+from httpx._models import Response
 
 
 class FNSError(Exception):

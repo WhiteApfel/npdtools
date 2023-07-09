@@ -39,7 +39,7 @@
 <span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Union</span>
 
 
-<div class="viewcode-block" id="IncomeTypes"><a class="viewcode-back" href="../../../Types.html#npdtools.types.IncomeTypes">[документация]</a><span class="k">class</span> <span class="nc">IncomeTypes</span><span class="p">:</span>
+<div class="viewcode-block" id="IncomeTypes"><a class="viewcode-back" href="../../../Types.html#npdtools.types.IncomeTypes">[документация]</a><span class="k">class</span> <span class="nc">ClientType</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    **INDIVIDUAL**: для доходов от физических лиц из РФ</span>
 
@@ -72,10 +72,10 @@
             <span class="n">data</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inn&quot;</span><span class="p">,</span> <span class="n">inn</span><span class="p">))</span> <span class="k">if</span> <span class="n">inn</span> <span class="k">else</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-            <span class="s2">&quot;incomeType&quot;</span><span class="p">,</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">INDIVIDUAL</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">income_type</span> <span class="k">else</span> <span class="n">income_type</span>
+            <span class="s2">&quot;incomeType&quot;</span><span class="p">,</span> <span class="n">ClientType</span><span class="o">.</span><span class="n">INDIVIDUAL</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">income_type</span> <span class="k">else</span> <span class="n">income_type</span>
         <span class="p">)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">==</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">INDIVIDUAL</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">IncomeTypes</span><span class="o">.</span><span class="n">ENTITY</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inn</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">==</span> <span class="n">ClientType</span><span class="o">.</span><span class="n">INDIVIDUAL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">income_type</span> <span class="o">=</span> <span class="n">ClientType</span><span class="o">.</span><span class="n">ENTITY</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">contact_phone</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;contactPhone&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;displayName&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">display_name</span> <span class="k">else</span> <span class="n">display_name</span>
