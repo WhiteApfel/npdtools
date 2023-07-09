@@ -1,4 +1,5 @@
 from io import open
+from os import environ
 
 from setuptools import setup
 
@@ -8,16 +9,21 @@ def read(filename):
         return file.read()
 
 
+def requirements():
+    with open('requirements.txt', 'r') as req:
+        return [r for r in req.read().split("\n") if r]
+
+
 setup(
     name="npdtools",
-    version="1.0.0",
+    version=environ.get("CI_COMMIT_TAG", '0.0.1local').replace('v', ''),
     packages=["npdtools", "npdtools.types"],
     url="https://gitlab.com/whiteapfel/npdtools",
     license="MPL 2.0",
     author="WhiteApfel",
     author_email="white@pfel.ru",
     description="tool for work with FNS API",
-    install_requires=["typing", "httpx", "python-dateutil", "pydantic>=2.0.2"],
+    install_requires=requirements(),
     project_urls={
         "Документация": "https://npd-tools.readthedocs.io/en/latest/",
         "Исходники": "https://gitlab.com/whiteapfel/npdtools/",
