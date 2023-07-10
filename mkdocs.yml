@@ -47,3 +47,9 @@ plugins:
           show_symbol_type_heading: true
           docstring_options:
             ignore_init_summary: true
+
+markdown_extensions:
+- pymdownx.details
+- pymdownx.superfences
+- pymdownx.highlight
+- pymdownx.extra
