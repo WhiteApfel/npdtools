@@ -37,7 +37,7 @@ class NPDToolsIncome(NPDToolsBase):
         Warning: Объект дохода
             Для получения полного объекта Income, следует обратиться к методу ``NPDTools.get_income(receipt_id=NewIncome.receipt_id)``
 
-        Примеры использования здесь: <<link>>
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_4)
 
         Args:
             *services: Позиции в чеке: список товаров, услуг или подобного
@@ -85,7 +85,7 @@ class NPDToolsIncome(NPDToolsBase):
         """
         Метод для аннулирования задекларированного дохода.
 
-        Примеры использования здесь: <<link>>
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_9)
 
         Args:
             receipt_id: Номер чека. Те самые буквы-цифры.

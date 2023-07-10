@@ -11,19 +11,6 @@ from npdtools.token_manager import AbstractTokenManager, InMemoryTokenManager
 
 
 class NPDToolsBase:
-    # """
-    # Сама магическая штука для работы с чеками самозанятого
-    #
-    # **Аргументы**
-    # :param login: Логин, но на самом деле ваш ИНН, за исключением редких случаев
-    # :type login: ``str``
-    # :param password: Пароль от личного кабинета.
-    # Если авторизация через Госуслуги, то читать заметку (TODO: добавить ссылку)
-    # :type password: ``str``
-    # :param api_url: На случай смены адреса апишки
-    # :type api_url: ``str``, optional
-    # """
-
     def __init__(
         self,
         token_manager: Type[AbstractTokenManager] = InMemoryTokenManager,

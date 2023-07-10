@@ -26,6 +26,8 @@ class NPDToolsInvoice(NPDToolsBase):
         """
         Метод для получения списка счетов с учётом фильтров.
 
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_12)
+
         Args:
             from_date: Время начала поиск. Можно передать ``int``, тогда аргумент примет значение "``int`` дней назад", а время установится на ``0:00:00``
             to_date: Время окончания поиска. По умолчанию принимает значение ``datetime.now()``. Можно передать ``int``, тогда аргумент примет значение "``int`` дней назад", а время установится на ``23:59:59``
@@ -102,6 +104,7 @@ class NPDToolsInvoice(NPDToolsBase):
         На указанный ClientInfo.email должен отправиться чек после его формирования,
         но вообще не факт, что это произойдет.
 
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_11)
 
         Warning: Сведения о клиенте
             Для выставления счёта обязательно указать хоть какие-то сведения о контрагенте.
@@ -168,6 +171,8 @@ class NPDToolsInvoice(NPDToolsBase):
         """
         Метод для отмены счёта. Выданный к счёту чек не отменяется, вроде, его надо руками отменять.
 
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_11)
+
         Args:
             invoice_id: Номер счёта ``Invoice.invoice_id``
 
@@ -184,6 +189,8 @@ class NPDToolsInvoice(NPDToolsBase):
     async def invoice_paid(self, invoice_id: int) -> Invoice:
         """
         Метод, чтобы отметить счёт оплаченным. Чек можно выдать позже.
+
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_11)
 
         Args:
             invoice_id: Номер счёта ``Invoice.invoice_id``
@@ -203,6 +210,8 @@ class NPDToolsInvoice(NPDToolsBase):
     ) -> Invoice:
         """
         Метод для выдачи чека к счёту. Счёт автоматически становится оплаченным.
+
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_11)
 
         Args:
             invoice_id: Номер счёта ``Invoice.invoice_id``
@@ -238,6 +247,8 @@ class NPDToolsInvoice(NPDToolsBase):
         """
         Метод для смены способа получения денег по счёту
 
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_11)
+
         Args:
             invoice_id: Номер счёта ``Invoice.invoice_id``
             bank: Сведения о способе получения денег. Можно создать руками или получить из ``NPDTools.get_payment_options()``
@@ -271,6 +282,8 @@ class NPDToolsInvoice(NPDToolsBase):
     ) -> PaymentOptions:
         """
         Метод для получения списка сохранённых способов получения денег по счёту
+
+        [Примеры использования](https://npd-tools.readthedocs.io/en/dev/guide/example/#_11)
 
         Args:
             by_type: Отфильтровать по типу способа получения

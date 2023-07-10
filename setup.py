@@ -10,7 +10,7 @@ def read(filename):
 
 setup(
     name="npdtools",
-    version="1.0a2",
+    version="1.0.0",
     packages=["npdtools", "npdtools.types"],
     url="https://gitlab.com/whiteapfel/npdtools",
     license="MPL 2.0",
