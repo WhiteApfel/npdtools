@@ -17,6 +17,18 @@ from npdtools.types.service import Service
 
 
 class PaymentOption(BaseModel):
+    """
+    Объект со способом приёма денег по счёту
+
+    Attributes:
+        id: Идентификатор способа оплаты
+        type: Тип: по телефону или по номер счёта
+        bank: Собственно, сами сведения о способе приёма
+        is_favorite: Является ли способ приоритетным. Может быть один на каждый ``PaymentOption.type``
+        is_for_pa: Хз, зачем и что такое
+        raw: JSON'подобный словарь, содержащий необработанный ответ ФНС
+    """
+
     id: int
     type: Literal["ACCOUNT", "PHONE"]
     bank: BankAccount | BankPhone
@@ -50,6 +62,13 @@ class PaymentOption(BaseModel):
 
 
 class PaymentOptions(BaseModel):
+    """
+    Итерируемый список способов получения денег по счёту
+
+    Attributes:
+        options: Сам список хранится в этой переменной, но работать можно и с самим объектом сразу
+    """
+
     options: list[PaymentOption] = Field(..., alias="items")
 
     def __iter__(self):
@@ -63,6 +82,25 @@ class PaymentOptions(BaseModel):
 
 
 class ReceiptTemplate(BaseModel):
+    """
+    Настройки чека
+
+    Notes: Редактор чека
+        Отображение всех полей настраивается в [редакторе чека](https://lknpd.nalog.ru/settings/checks-editor).
+
+        Содержимое ``profession`` и ``description`` можно отредактировать.
+        Содержимое ``email`` и ``phone`` изменяется только через их смену в профиле.
+
+        **Применяется только к вновь создаваемым счетам.**
+
+    Attributes:
+        profession: Строка, описывающая деятельность самозанятого
+        description: Список дополнительного описания деятельности
+        email: Адрес электронной почты
+        phone: Номер телефона
+
+    """
+
     profession: str | None = None
     phone: str | None = None
     email: str | None = None
@@ -70,6 +108,32 @@ class ReceiptTemplate(BaseModel):
 
 
 class Invoice(BaseModel):
+    """
+    Attributes:
+        invoice_id: Номер счёта
+        receipt_id: Номер чека, выданного к этому счёту, если, конечно, выдан
+        services: Список позиций в чеке
+        url: Ссылка на страницу со счётом. Можно отправить контрагенту
+        status: Статус счёта
+        payment_type: Способ получения денег
+        total_amount: Общая сумма всех позиций в счёте
+        total_tax: Сумма налогов за этот счёт
+        commission: Комиссия за получение денег. Сейчас её нет или она равна нулю
+        created_at: Время создания счёта
+        paid_at: Время оплаты счёта
+        canceled_at: Время отмены счёта
+        bank: Сведения о способе получения денег по счёту
+        client_info: Сведения о клиенте
+        employee_info: Сведения о самозанятом
+        acquiring_info: Сведения об эквайринге, если для получения используется он (TODO: Возможно, надо перенести в bank_info)
+        receipt_template: Сведения о самозанятом для отображения в счёте и чеке
+        type: Способ создания счёта, обычно ``MANUAL``
+        auto_create_receipt: Был ли счёт создан автоматически
+
+        uuid: Технический идентификатор счёта в ФНС
+        fid: Ещё один рандомный идентификатор
+    """
+
     invoice_id: int = Field(..., alias="invoiceId")
     uuid: str
     receipt_id: str | None = Field(..., alias="receiptId")
@@ -80,7 +144,7 @@ class Invoice(BaseModel):
     url: str = Field(..., alias="transitionPageURL")
 
     status: Literal[
-        "CREATED", "PAID_WITHOUT_RECEIPT", "PAID_WITHOUT_RECEIPT", "PAID_WITH_RECEIPT"
+        "CREATED", "CANCELLED", "PAID_WITHOUT_RECEIPT", "PAID_WITH_RECEIPT"
     ] | str
 
     payment_type: PaymentTypes = Field(..., alias="paymentType")
@@ -91,11 +155,12 @@ class Invoice(BaseModel):
 
     created_at: datetime = Field(..., alias="createdAt")
     paid_at: datetime | None = Field(None, alias="paidAt")
-    cancelled_at: datetime | None = Field(None, alias="cancelledAt")
+    canceled_at: datetime | None = Field(None, alias="cancelledAt")
 
     bank: BankAccount | BankPhone
     client_info: ClientInfo
     employee_info: EmployeeInfo
+    acquiring_info: AcquiringInfo
 
     receipt_template: ReceiptTemplate | None = Field(..., alias="receiptTemplate")
     type: Literal["MANUAL"]
@@ -103,11 +168,19 @@ class Invoice(BaseModel):
 
     @property
     def is_paid(self) -> bool:
+        """
+        Returns:
+            bool: Оплачен ли счёт
+        """
         return self.paid_at is not None
 
     @property
-    def is_cancelled(self) -> bool:
-        return self.cancelled_at is not None
+    def is_canceled(self) -> bool:
+        """
+        Returns:
+            bool: Отменён ли счёт
+        """
+        return self.canceled_at is not None
 
     @model_validator(mode="before")
     @classmethod
@@ -161,6 +234,16 @@ class Invoice(BaseModel):
 
 
 class InvoicesList(BaseModel):
+    """
+    Содержит сведения о счетах и пагинации
+
+    Attributes:
+        invoices: Список счетов
+        has_more: Есть ли ещё счета для получения
+        offset: Отступ от начала
+        limit: Количество в выдаче
+    """
+
     invoices: list[Invoice] = Field(..., alias="items")
     has_more: bool = Field(..., alias="hasMore")
     offset: int = Field(..., alias="currentOffset")

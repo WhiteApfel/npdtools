@@ -5,6 +5,16 @@ from npdtools.helpers import amount_to_decimal
 
 
 class Service(BaseModel):
+    """
+    Объект позиции в чеке или счёте
+
+    Attributes:
+        name: Название позиции: товара, услуги или подобного
+        amount: Цена единицы позиции. За штуку, грамм или подобное
+        quantity: Количество. Штук, грамм или подобного
+        number: Порядковый номер позиции. Техническая штука.
+    """
+
     name: str
     amount: Decimal
     quantity: int = 1
@@ -17,4 +27,8 @@ class Service(BaseModel):
 
     @property
     def service_amount(self) -> Decimal:
+        """
+        Returns:
+            Decimal: Стоимость всей позиции. Цена умножить на количество.
+        """
         return self.amount * self.quantity

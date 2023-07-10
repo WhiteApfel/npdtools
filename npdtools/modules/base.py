@@ -11,18 +11,18 @@ from npdtools.token_manager import AbstractTokenManager, InMemoryTokenManager
 
 
 class NPDToolsBase:
-    """
-    Сама магическая штука для работы с чеками самозанятого
-
-    **Аргументы**
-    :param login: Логин, но на самом деле ваш ИНН, за исключением редких случаев
-    :type login: ``str``
-    :param password: Пароль от личного кабинета.
-    Если авторизация через Госуслуги, то читать заметку (TODO: добавить ссылку)
-    :type password: ``str``
-    :param api_url: На случай смены адреса апишки
-    :type api_url: ``str``, optional
-    """
+    # """
+    # Сама магическая штука для работы с чеками самозанятого
+    #
+    # **Аргументы**
+    # :param login: Логин, но на самом деле ваш ИНН, за исключением редких случаев
+    # :type login: ``str``
+    # :param password: Пароль от личного кабинета.
+    # Если авторизация через Госуслуги, то читать заметку (TODO: добавить ссылку)
+    # :type password: ``str``
+    # :param api_url: На случай смены адреса апишки
+    # :type api_url: ``str``, optional
+    # """
 
     def __init__(
         self,
@@ -33,6 +33,18 @@ class NPDToolsBase:
         *args,
         **token_manager_data,
     ):
+        """
+
+        Args:
+            token_manager:
+            default_inn:
+            base_url:
+            http_session:
+            *args:
+            **token_manager_data:
+        Attributes:
+
+        """
         self._base_url = LKNPD_API_V1 if not base_url else base_url
         self._http_session: AsyncClient = http_session
 

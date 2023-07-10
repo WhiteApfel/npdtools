@@ -8,10 +8,10 @@ from .entity import (
     PartnerInfo,
 )
 from .income import (
-    AddIncomeInfo,
-    CancellationIncome,
+    CanceledIncome,
     IncomeInfo,
     IncomesList,
+    NewIncome,
     PaymentTypes,
     SortTypes,
 )

@@ -2,12 +2,7 @@ from datetime import datetime, timedelta
 
 from npdtools.modules.base import NPDToolsBase
 from npdtools.types.entity import ClientInfo
-from npdtools.types.income import (
-    AddIncomeInfo,
-    CancellationIncome,
-    IncomesList,
-    SortTypes,
-)
+from npdtools.types.income import CanceledIncome, IncomesList, NewIncome, SortTypes
 from npdtools.types.service import Service
 
 
@@ -17,7 +12,41 @@ class NPDToolsIncome(NPDToolsBase):
         *services: Service,
         client: ClientInfo | None = None,
         operation_time: datetime | str = None,
-    ):
+    ) -> NewIncome:
+        """
+        Метод для декларирования дохода. Иными словами, выдача чека.
+
+        Notes: Список позиций чека
+            Позиции чека передаются неименованными аргументами в количество 1+ штук. Вот пример:
+
+            ```python
+            services = [
+                Service(name="Написание документации", amount=2500),
+                Service(name="Настройка конфигов для документации", amount=1234.45, quantity=2),
+                Service(name="Написание пайплайнов Gitlab CI", amount=Decimal("123.1")),
+            ]
+            service = Service(name="Капли для глаз", amount="12")
+
+            await NPDTools.declare_income(*services)
+            # or
+            await NPDTools.declare_income(service, client=...)
+            # or
+            await NPDTools.declare_income(service, *services, client=...)
+            ```
+
+        Warning: Объект дохода
+            Для получения полного объекта Income, следует обратиться к методу ``NPDTools.get_income(receipt_id=NewIncome.receipt_id)``
+
+        Примеры использования здесь: <<link>>
+
+        Args:
+            *services: Позиции в чеке: список товаров, услуг или подобного
+            client: Объект сведений о клиенте
+            operation_time: Дата и время получения дохода.
+
+        Returns:
+            NewIncome: Объект нового дохода, **содержащий на данный момент только номер чека**,
+        """
         client = client if client is not None else ClientInfo()
 
         operation_time = (
@@ -45,15 +74,27 @@ class NPDToolsIncome(NPDToolsBase):
         )
         print(response.json())
 
-        if response.is_success:
-            return AddIncomeInfo(**response.json())
+        return NewIncome(**response.json())
 
     async def cancel_income(
         self,
         receipt_id: str,
         comment: str = "Чек сформирован ошибочно",
-        cancellation_time: datetime | None = None,
-    ) -> CancellationIncome:
+        cancellation_time: datetime | str | None = None,
+    ) -> CanceledIncome:
+        """
+        Метод для аннулирования задекларированного дохода.
+
+        Примеры использования здесь: <<link>>
+
+        Args:
+            receipt_id: Номер чека. Те самые буквы-цифры.
+            comment: Комментарий, по какой причине происходит аннулирование
+            cancellation_time: Время отмены. Например, если вы вернули деньги вчера. По умолчанию принимает значение ``datetime.now()``
+
+        Returns:
+            CanceledIncome: Сведения об аннулированном доходе
+        """
         cancellation_time = (
             cancellation_time if cancellation_time is not None else datetime.now()
         )
@@ -76,8 +117,7 @@ class NPDToolsIncome(NPDToolsBase):
             json=data,
         )
 
-        print(response.json())
-        return CancellationIncome(**response.json()["incomeInfo"])
+        return CanceledIncome(**response.json()["incomeInfo"])
 
     async def get_incomes(
         self,
@@ -88,13 +128,37 @@ class NPDToolsIncome(NPDToolsBase):
         sort_type: SortTypes | str = SortTypes.time,
         is_sort_asc: bool = False,
     ) -> IncomesList:
+        """
+        Метод для получения списка задекларированных доходов с учётом фильтров.
+
+        Args:
+            from_date: Время начала поиск. Можно передать ``int``, тогда аргумент примет значение "``int`` дней назад", а время установится на ``0:00:00``
+            to_date: Время окончания поиска. По умолчанию принимает значение ``datetime.now()``. Можно передать ``int``, тогда аргумент примет значение "``int`` дней назад", а время установится на ``23:59:59``
+            offset: Сдвиг от начала найденных доходов (в т.ч. аннулированных)
+            limit: Количество доходов в выдаче
+            sort_type: Тип сортировки: по дате или сумме
+            is_sort_asc: Сортировка по возрастанию?
+
+        Returns:
+            IncomesList: Список доходов и сведения о пагинации
+        """
         if from_date is None:
             from_date: datetime = datetime.now()
         if isinstance(from_date, int):
-            from_date: datetime = datetime.now() - timedelta(days=from_date)
+            from_date: datetime = (datetime.now() - timedelta(days=from_date)).replace(
+                hour=0,
+                minute=0,
+                second=0,
+                microsecond=0,
+            )
 
         if isinstance(to_date, int):
-            to_date: datetime = datetime.now() - timedelta(days=to_date)
+            to_date: datetime = (datetime.now() - timedelta(days=to_date)).replace(
+                hour=23,
+                minute=59,
+                second=59,
+                microsecond=999999,
+            )
 
         params = {
             "from": (
