@@ -3,6 +3,7 @@ pypi-publish:
   script:
     - python -V
     - pip install virtualenv
+    - pip install -U pip setuptools 
     - virtualenv venv
     - source venv/bin/activate
     - python setup.py sdist bdist_wheel
