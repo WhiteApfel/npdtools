@@ -3,9 +3,9 @@ pypi-publish:
   script:
     - python -V
     - pip install virtualenv
-    - pip install -U pip setuptools 
     - virtualenv venv
     - source venv/bin/activate
+    - pip install -U pip setuptools 
     - python setup.py sdist bdist_wheel
     - pip install twine
     - twine upload dist/*
