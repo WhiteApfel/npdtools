@@ -17,7 +17,7 @@ def requirements():
 setup(
     name="npdtools",
     version=environ.get("CI_COMMIT_TAG", '0.0.1local').replace('v', ''),
-    packages=["npdtools", "npdtools.types"],
+    packages=["npdtools", "npdtools.types", "npdtools.errors", "npdtools.modules"],
     url="https://gitlab.com/whiteapfel/npdtools",
     license="MPL 2.0",
     author="WhiteApfel",
